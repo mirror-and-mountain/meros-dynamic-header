@@ -13,3 +13,4 @@
 
 
  include_once 'includes/register.php';
+ include_once 'includes/filters.php';

@@ -1,7 +1,7 @@
 import { mmHeaderColorParser, parseRgbaValues, interpolateColor } from "./view-helpers.js";
 
 document.addEventListener('DOMContentLoaded', function () {
-    const mmHeader = document.querySelector('.wp-block-mm-components-mm-dynamic-header');
+    const mmHeader = document.querySelector('.wp-block-meros-dynamic-header');
     
     if (!mmHeader) {
         return;
