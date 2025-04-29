@@ -1,0 +1,15 @@
+{
+    "name": "mirror-and-mountain/meros-dynamic-header",
+    "description": "A dynamic header block for Wordpress",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "version": "dev-main",
+    "authors": [
+        {
+            "name": "tmw-mm",
+            "email": "toby@mirrorandmountain.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

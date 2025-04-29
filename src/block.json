@@ -1,0 +1,80 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "meros/dynamic-header",
+	"version": "0.1.0",
+	"title": "Meros Dynamic Header",
+	"category": "design",
+	"icon": "format-image",
+	"description": "",
+	"example": {},
+	"supports": {
+		"layout": {
+			"allowEditing": true,
+			"allowSwitching": false,
+			"allowCustomContentAndWideSize": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"gradients": true,
+			"background": true,
+			"text": true
+		}
+	},
+	"attributes": {
+		"isSticky": {
+			"type": "boolean",
+			"default": true
+		},
+		"bottomOffset": {
+			"type": "boolean",
+			"default": true
+		},
+		"isOverlay": {
+			"type": "boolean",
+			"default": false
+		},
+		"overlayStartColor": {
+			"type": "object",
+			"default": {
+				"r": 255,
+				"g": 255,
+				"b": 255,
+				"a": 0
+			}
+		},
+		"overlayEndColor": {
+			"type": "object",
+			"default": {
+				"r": 20,
+				"g": 20,
+				"b": 2,
+				"a": 1
+			}
+		},
+        "style": {
+            "type": "object",
+            "default": {
+				"color": {
+					"background": "#090909",
+					"text": "#F4F4F4"
+				},
+                "spacing": {
+                    "padding": {
+                        "top": "var(--wp--preset--spacing--20)",
+                        "right": "var(--wp--preset--spacing--70)",
+                        "bottom": "var(--wp--preset--spacing--20)",
+                        "left": "var(--wp--preset--spacing--70)"
+                    }
+                }
+            }
+        }
+	},
+	"textdomain": "meros-dynamic-header",
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js",
+	"style": "file:./style-index.css"
+}
