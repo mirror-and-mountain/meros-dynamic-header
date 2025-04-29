@@ -19,8 +19,10 @@ export default function save({attributes}) {
         isSticky, 
         bottomOffset, 
         isOverlay, 
-        overlayStartColor, 
-        overlayEndColor 
+        backgroundStartColor, 
+        backgroundEndColor,
+        textStartColor,
+        textEndColor
     } = attributes;
 
     return (
@@ -28,8 +30,10 @@ export default function save({attributes}) {
             data-sticky={ isSticky }
             data-bottom-offset={ bottomOffset }
             data-overlay={ isOverlay }
-            data-overlay-start={ isOverlay ? JSON.stringify(overlayStartColor) : '' }
-            data-overlay-end={ isOverlay ? JSON.stringify(overlayEndColor) : '' }
+            data-background-start={ isOverlay ? JSON.stringify(backgroundStartColor) : '' }
+            data-background-end={ isOverlay ? JSON.stringify(backgroundEndColor) : '' }
+            data-text-start={ isOverlay ? JSON.stringify(textStartColor) : '' }
+            data-text-end={ isOverlay ? JSON.stringify(textEndColor) : '' }
         >
             <InnerBlocks.Content />
         </header>

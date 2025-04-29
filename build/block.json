@@ -37,7 +37,7 @@
       "type": "boolean",
       "default": false
     },
-    "overlayStartColor": {
+    "backgroundStartColor": {
       "type": "object",
       "default": {
         "r": 255,
@@ -46,7 +46,25 @@
         "a": 0
       }
     },
-    "overlayEndColor": {
+    "backgroundEndColor": {
+      "type": "object",
+      "default": {
+        "r": 20,
+        "g": 20,
+        "b": 2,
+        "a": 1
+      }
+    },
+    "textStartColor": {
+      "type": "object",
+      "default": {
+        "r": 20,
+        "g": 20,
+        "b": 2,
+        "a": 1
+      }
+    },
+    "textEndColor": {
       "type": "object",
       "default": {
         "r": 20,

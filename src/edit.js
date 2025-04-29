@@ -10,8 +10,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         isSticky, 
         bottomOffset, 
         isOverlay, 
-        overlayStartColor, 
-        overlayEndColor 
+        backgroundStartColor, 
+        backgroundEndColor,
+        textStartColor,
+        textEndColor 
     } = attributes;
 
     useEffect(() => {
@@ -51,17 +53,31 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         { isOverlay && (
                             <>
                                 <div style={ { marginBottom: '15px' } }>
-                                    <p>{__( 'Overlay Start Color', 'mm-components' )}</p>
+                                    <p>{__( 'Background Start Color', 'mm-components' )}</p>
                                     <ColorPicker
-                                        color={ overlayStartColor }
-                                        onChangeComplete={ ( color ) => setAttributes( { overlayStartColor: color.rgb } ) }
+                                        color={ backgroundStartColor }
+                                        onChangeComplete={ ( color ) => setAttributes( { backgroundStartColor: color.rgb } ) }
                                     />
                                 </div>
                                 <div>
-                                    <p>{__( 'Overlay End Color', 'mm-components' )}</p>
+                                    <p>{__( 'Background End Color', 'mm-components' )}</p>
                                     <ColorPicker
-                                        color={ overlayEndColor }
-                                        onChangeComplete={ ( color ) => setAttributes( { overlayEndColor: color.rgb } ) }
+                                        color={ backgroundEndColor }
+                                        onChangeComplete={ ( color ) => setAttributes( { backgroundEndColor: color.rgb } ) }
+                                    />
+                                </div>
+                                <div>
+                                    <p>{__( 'Text Start Color', 'mm-components' )}</p>
+                                    <ColorPicker
+                                        color={ textStartColor }
+                                        onChangeComplete={ ( color ) => setAttributes( { textStartColor: color.rgb } ) }
+                                    />
+                                </div>
+                                <div>
+                                    <p>{__( 'Text End Color', 'mm-components' )}</p>
+                                    <ColorPicker
+                                        color={ textEndColor }
+                                        onChangeComplete={ ( color ) => setAttributes( { textEndColor: color.rgb } ) }
                                     />
                                 </div>
                             </>
@@ -74,8 +90,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 data-sticky={ isSticky }
                 data-bottom-offset={ bottomOffset }
                 data-overlay={ isOverlay }
-                data-overlay-start={ isOverlay ? JSON.stringify(overlayStartColor) : '' }
-                data-overlay-end={ isOverlay ? JSON.stringify(overlayEndColor) : '' }
+                data-background-start={ isOverlay ? JSON.stringify(backgroundStartColor) : '' }
+                data-background-end={ isOverlay ? JSON.stringify(backgroundEndColor) : '' }
+                data-text-start={ isOverlay ? JSON.stringify(textStartColor) : '' }
+                data-text-end={ isOverlay ? JSON.stringify(textEndColor) : '' }
             >
                 <div>
                     <InnerBlocks 

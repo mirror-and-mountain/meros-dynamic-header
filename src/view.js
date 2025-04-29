@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
         isSticky: mmHeader.getAttribute('data-sticky') === 'true',
         bottomOffset: mmHeader.getAttribute('data-bottom-offset') === 'true',
         isOverlay: mmHeader.getAttribute('data-overlay') === 'true',
-        overlayStartColor: mmHeader.getAttribute('data-overlay-start'),
-        overlayEndColor: mmHeader.getAttribute('data-overlay-end'),
+        backgroundStartColor: mmHeader.getAttribute('data-background-start'),
+        backgroundEndColor: mmHeader.getAttribute('data-background-end'),
+        textStartColor: mmHeader.getAttribute('data-text-start'),
+        textEndColor: mmHeader.getAttribute('data-text-end'),
         blockGap: mmHeader.getAttribute('data-block-gap')
     };
 
@@ -52,14 +54,21 @@ document.addEventListener('DOMContentLoaded', function () {
         mmHeader.style.marginBottom = (mmHeaderBottomMargin.replace(unit, '') - mmHeaderHeight) + unit;
 
         // Convert start and end colors to usable RGBA
-        const startColor = mmHeaderColorParser(mmHeaderSettings.overlayStartColor);
-        const endColor   = mmHeaderColorParser(mmHeaderSettings.overlayEndColor);
+        const backgroundStartColor = mmHeaderColorParser(mmHeaderSettings.backgroundStartColor);
+        const backgroundEndColor   = mmHeaderColorParser(mmHeaderSettings.backgroundEndColor);
 
-        const startColorValues = parseRgbaValues(startColor);
-        const endColorValues   = parseRgbaValues(endColor);
+        const backgroundStartColorValues = parseRgbaValues(backgroundStartColor);
+        const backgroundEndColorValues   = parseRgbaValues(backgroundEndColor);
+
+        const textStartColor = mmHeaderColorParser(mmHeaderSettings.textStartColor);
+        const textEndColor   = mmHeaderColorParser(mmHeaderSettings.textEndColor);
+
+        const textStartColorValues = parseRgbaValues(textStartColor);
+        const textEndColorValues   = parseRgbaValues(textEndColor);
 
         // Set initial background color
-        mmHeader.style.backgroundColor = startColor;
+        mmHeader.style.backgroundColor = backgroundStartColor;
+        mmHeader.style.color = textStartColor;
 
         // Scroll event to adjust opacity dynamically
         window.addEventListener('scroll', function () {
@@ -67,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const mmHeaderMaxScroll = 40;
             const mmHeaderOpacity   = Math.min(mmHeaderScrollTop / mmHeaderMaxScroll, 1);
 
-            mmHeader.style.backgroundColor = interpolateColor(startColorValues, endColorValues, mmHeaderOpacity);
+            mmHeader.style.backgroundColor = interpolateColor(backgroundStartColorValues, backgroundEndColorValues, mmHeaderOpacity);
+            mmHeader.style.color = interpolateColor(textStartColorValues, textEndColorValues, mmHeaderOpacity);
         });
          
     }
