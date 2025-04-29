@@ -1,6 +1,6 @@
 import { mmHeaderColorParser, parseRgbaValues, interpolateColor } from "./view-helpers.js";
 
-document.addEventListener('DOMContentLoaded', function () {
+function merosDynamicHeaderInit () {
     const mmHeader = document.querySelector('.wp-block-meros-dynamic-header');
     
     if (!mmHeader) {
@@ -81,4 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
          
     }
-});
+};
+
+document.addEventListener('DOMContentLoaded', merosDynamicHeaderInit);
+document.addEventListener('livewire:navigated', merosDynamicHeaderInit);
