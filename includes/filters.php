@@ -8,7 +8,7 @@ add_filter('render_block_meros/dynamic-header', function ( $block_content, $bloc
 
     $processor = new \WP_HTML_Tag_Processor( $block_content );
 
-    if ( $processor->next_tag( 'header' ) ) {
+    if ( $processor->next_tag( 'div' ) ) {
         $block_spacing = wp_get_global_styles( ['styles'] )['spacing']['blockGap'];
 
         // Update the style attribute

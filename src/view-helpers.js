@@ -1,9 +1,8 @@
 /*
- * This file includes helper functions to process the mm-dynamic-header block
+ * This file includes helper functions to process the meros-dynamic-header block
  * where the user has opted into 'overlaying' it with start and end colors on scroll.
  * 
  */
-
 
 /* Color Parser: Converts JSON RGBA or HEX to RGBA format  */
 export const mmHeaderColorParser = function (colorString) {

@@ -1,8 +1,9 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl, ColorPicker } from '@wordpress/components';
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
 import { select, dispatch } from '@wordpress/data';
+
+import { Controls } from './components/controls.js';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
@@ -29,71 +30,19 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
     return (
         <>
-            <InspectorControls>
-                <PanelBody title={__( 'Block Settings', 'mm-components' )} initialOpen={ true }>
-                    <ToggleControl
-                        label={__( 'Sticky', 'mm-components' )}
-                        checked={ isSticky }
-                        onChange={ ( value ) => setAttributes( { isSticky: value } ) }
-                    />
-                    <ToggleControl
-                        label={__( 'Bottom Offset', 'mm-components' )}
-                        checked={ bottomOffset }
-                        onChange={ ( value ) => setAttributes( { bottomOffset: value } ) }
-                    />
-                </PanelBody>
+            <Controls
+                attributes={attributes}
+                setAttributes={setAttributes}
+            />
 
-                { isSticky && (
-                    <PanelBody title={__( 'Overlay Settings', 'mm-components' )} initialOpen={ false }>
-                        <ToggleControl
-                            label={__( 'Enable Overlay', 'mm-components' )}
-                            checked={ isOverlay }
-                            onChange={ ( value ) => setAttributes( { isOverlay: value } ) }
-                        />
-                        { isOverlay && (
-                            <>
-                                <div style={ { marginBottom: '15px' } }>
-                                    <p>{__( 'Background Start Color', 'mm-components' )}</p>
-                                    <ColorPicker
-                                        color={ backgroundStartColor }
-                                        onChangeComplete={ ( color ) => setAttributes( { backgroundStartColor: color.rgb } ) }
-                                    />
-                                </div>
-                                <div>
-                                    <p>{__( 'Background End Color', 'mm-components' )}</p>
-                                    <ColorPicker
-                                        color={ backgroundEndColor }
-                                        onChangeComplete={ ( color ) => setAttributes( { backgroundEndColor: color.rgb } ) }
-                                    />
-                                </div>
-                                <div>
-                                    <p>{__( 'Text Start Color', 'mm-components' )}</p>
-                                    <ColorPicker
-                                        color={ textStartColor }
-                                        onChangeComplete={ ( color ) => setAttributes( { textStartColor: color.rgb } ) }
-                                    />
-                                </div>
-                                <div>
-                                    <p>{__( 'Text End Color', 'mm-components' )}</p>
-                                    <ColorPicker
-                                        color={ textEndColor }
-                                        onChangeComplete={ ( color ) => setAttributes( { textEndColor: color.rgb } ) }
-                                    />
-                                </div>
-                            </>
-                        )}
-                    </PanelBody>
-                )}
-            </InspectorControls>
-
-            <header {...useBlockProps()} 
+            <div {...useBlockProps()} 
                 data-sticky={ isSticky }
                 data-bottom-offset={ bottomOffset }
                 data-overlay={ isOverlay }
-                data-background-start={ isOverlay ? JSON.stringify(backgroundStartColor) : '' }
-                data-background-end={ isOverlay ? JSON.stringify(backgroundEndColor) : '' }
-                data-text-start={ isOverlay ? JSON.stringify(textStartColor) : '' }
-                data-text-end={ isOverlay ? JSON.stringify(textEndColor) : '' }
+                data-background-start={ isOverlay ? backgroundStartColor : '' }
+                data-background-end={ isOverlay ? backgroundEndColor : '' }
+                data-text-start={ isOverlay ? textStartColor : '' }
+                data-text-end={ isOverlay ? textEndColor : '' }
             >
                 <div>
                     <InnerBlocks 
@@ -108,7 +57,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         ]}
                     />
                 </div>
-            </header>
+            </div>
         </>
     );
 }

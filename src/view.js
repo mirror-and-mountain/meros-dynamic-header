@@ -1,87 +1,66 @@
-import { mmHeaderColorParser, parseRgbaValues, interpolateColor } from "./view-helpers.js";
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
-function merosDynamicHeaderInit () {
-    const mmHeader = document.querySelector('.wp-block-meros-dynamic-header');
-    
-    if (!mmHeader) {
-        return;
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.wp-block-meros-dynamic-header');
+
+    if (!header) return;
+
+    const isSticky     = header.dataset.sticky === 'true';
+    const bottomOffset = header.dataset.bottomOffset === 'true';
+    const isOverlay    = header.dataset.overlay === 'true';
+    const blockGap     = header.dataset.blockGap;
+
+    if (isSticky) {
+        header.style.position = 'sticky';
+        header.style.top = 0;
+        header.style.zIndex = 50
     }
 
-    // Get header settings
-    const mmHeaderSettings = {
-        isSticky: mmHeader.getAttribute('data-sticky') === 'true',
-        bottomOffset: mmHeader.getAttribute('data-bottom-offset') === 'true',
-        isOverlay: mmHeader.getAttribute('data-overlay') === 'true',
-        backgroundStartColor: mmHeader.getAttribute('data-background-start'),
-        backgroundEndColor: mmHeader.getAttribute('data-background-end'),
-        textStartColor: mmHeader.getAttribute('data-text-start'),
-        textEndColor: mmHeader.getAttribute('data-text-end'),
-        blockGap: mmHeader.getAttribute('data-block-gap')
-    };
-
-    // Make the header sticky
-    if (mmHeaderSettings.isSticky) {
-        mmHeader.style.position = 'sticky';
-        mmHeader.style.top = 0;
-        mmHeader.style.zIndex = 50
-        mmHeaderSettings.bottomOffset = true;
-    } else {
-        mmHeaderSettings.isOverlay = false;
+    if (bottomOffset || isSticky) {
+        header.style.marginBottom = '-' + blockGap;
     }
 
-    // Offset the blockGap with the bottom margin
-    if (mmHeaderSettings.bottomOffset) {
-        mmHeader.style.marginBottom = '-' + mmHeaderSettings.blockGap;
-    }
-
-    // Make the header an overlay
-    if (mmHeaderSettings.isOverlay) {
+    if (isOverlay) {
         let unit = 'rem';
         // The existing bottom margin
-        const mmHeaderBottomMargin = mmHeader.style.marginBottom;
+        const bottomMargin = header.style.marginBottom;
         // The height of the header element in px
-        let mmHeaderHeight = mmHeader.offsetHeight;
+        let height = header.offsetHeight;
 
         // Convert the px height to rem if existing bottom margin is in rem
-        if (mmHeaderBottomMargin.endsWith(unit)) {
+        if (bottomMargin.endsWith(unit)) {
             // Divide header height (px) by the root font size to get rem
-            mmHeaderHeight = mmHeaderHeight / parseFloat(getComputedStyle(document.documentElement).fontSize);
+            height = height / parseFloat(getComputedStyle(document.documentElement).fontSize);
         } else {
             unit = 'px';
         }
 
         // Offset the header's bottom margin.
-        mmHeader.style.marginBottom = (mmHeaderBottomMargin.replace(unit, '') - mmHeaderHeight) + unit;
+        header.style.marginBottom = (bottomMargin.replace(unit, '') - height) + unit;
 
-        // Convert start and end colors to usable RGBA
-        const backgroundStartColor = mmHeaderColorParser(mmHeaderSettings.backgroundStartColor);
-        const backgroundEndColor   = mmHeaderColorParser(mmHeaderSettings.backgroundEndColor);
+        const bgStart = header.dataset.backgroundStart || '#FFFFFF00';
+        const bgEnd = header.dataset.backgroundEnd || '#FFFFFF';
+        const textStart = header.dataset.textStart || '#000000';
+        const textEnd = header.dataset.textEnd || '#000000';
 
-        const backgroundStartColorValues = parseRgbaValues(backgroundStartColor);
-        const backgroundEndColorValues   = parseRgbaValues(backgroundEndColor);
-
-        const textStartColor = mmHeaderColorParser(mmHeaderSettings.textStartColor);
-        const textEndColor   = mmHeaderColorParser(mmHeaderSettings.textEndColor);
-
-        const textStartColorValues = parseRgbaValues(textStartColor);
-        const textEndColorValues   = parseRgbaValues(textEndColor);
-
-        // Set initial background color
-        mmHeader.style.backgroundColor = backgroundStartColor;
-        mmHeader.style.color = textStartColor;
-
-        // Scroll event to adjust opacity dynamically
-        window.addEventListener('scroll', function () {
-            const mmHeaderScrollTop = window.scrollY || document.documentElement.scrollTop;
-            const mmHeaderMaxScroll = 40;
-            const mmHeaderOpacity   = Math.min(mmHeaderScrollTop / mmHeaderMaxScroll, 1);
-
-            mmHeader.style.backgroundColor = interpolateColor(backgroundStartColorValues, backgroundEndColorValues, mmHeaderOpacity);
-            mmHeader.style.color = interpolateColor(textStartColorValues, textEndColorValues, mmHeaderOpacity);
-        });
-         
+        gsap.fromTo(header, 
+            {
+                backgroundColor: bgStart,
+                color: textStart
+            },
+            {
+                backgroundColor: bgEnd,
+                color: textEnd,
+                scrollTrigger: {
+                    trigger: header,
+                    start: 'top top',
+                    end: '+=100', // adjust this value to control when it finishes
+                    scrub: true
+                }
+            }
+        );
     }
-};
-
-document.addEventListener('DOMContentLoaded', merosDynamicHeaderInit);
-document.addEventListener('livewire:navigated', merosDynamicHeaderInit);
+});
