@@ -14,8 +14,8 @@
     "layout": {
       "default": {
         "type": "constrained",
-        "contentSize": "1400px",
-        "wideSize": "1400px",
+        "contentSize": "1300px",
+        "wideSize": "1300px",
         "justifyContent": "center"
       },
       "allowEditing": true,

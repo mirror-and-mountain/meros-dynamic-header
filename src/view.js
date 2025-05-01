@@ -4,14 +4,15 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('.wp-block-meros-dynamic-header');
+    const block  = document.querySelector('.wp-block-meros-dynamic-header');
+    const header = block.parentElement;
 
-    if (!header) return;
+    if (!header || header.tagName !== 'HEADER') return;
 
-    const isSticky     = header.dataset.sticky === 'true';
-    const bottomOffset = header.dataset.bottomOffset === 'true';
-    const isOverlay    = header.dataset.overlay === 'true';
-    const blockGap     = header.dataset.blockGap;
+    const isSticky     = block.dataset.sticky === 'true';
+    const bottomOffset = block.dataset.bottomOffset === 'true';
+    const isOverlay    = block.dataset.overlay === 'true';
+    const blockGap     = block.dataset.blockGap;
 
     if (isSticky) {
         header.style.position = 'sticky';
@@ -41,10 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Offset the header's bottom margin.
         header.style.marginBottom = (bottomMargin.replace(unit, '') - height) + unit;
 
-        const bgStart = header.dataset.backgroundStart || '#FFFFFF00';
-        const bgEnd = header.dataset.backgroundEnd || '#FFFFFF';
-        const textStart = header.dataset.textStart || '#000000';
-        const textEnd = header.dataset.textEnd || '#000000';
+        const bgStart = block.dataset.backgroundStart || '#FFFFFF00';
+        const bgEnd = block.dataset.backgroundEnd || '#FFFFFF';
+        const textStart = block.dataset.textStart || '#000000';
+        const textEnd = block.dataset.textEnd || '#000000';
 
         gsap.fromTo(header, 
             {
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollTrigger: {
                     trigger: header,
                     start: 'top top',
-                    end: '+=100', // adjust this value to control when it finishes
+                    end: '+=100',
                     scrub: true
                 }
             }
