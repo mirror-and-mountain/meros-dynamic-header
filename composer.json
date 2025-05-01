@@ -3,7 +3,6 @@
     "description": "A dynamic header block for Wordpress",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
-    "version": "dev-main",
     "authors": [
         {
             "name": "tmw-mm",
