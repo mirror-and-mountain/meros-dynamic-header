@@ -3,7 +3,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-document.addEventListener('DOMContentLoaded', () => {
+function initialiseHeader() {
     const block  = document.querySelector('.wp-block-meros-dynamic-header');
     const header = block.parentElement;
 
@@ -64,4 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         );
     }
-});
+};
+
+document.addEventListener('DOMContentLoaded', initialiseHeader);
+document.addEventListener('livewire:navigated', initialiseHeader);
+
+
