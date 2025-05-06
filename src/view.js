@@ -4,10 +4,16 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const block  = document.querySelector('.wp-block-meros-dynamic-header');
-    const header = block.parentElement;
+    const block    = document.querySelector('.wp-block-meros-dynamic-header');
+    const headerEl = block?.parentElement;
+    if (!headerEl || headerEl.tagName !== 'HEADER') return;
+    
+    const isWrappedInPersist = headerEl.closest('[x-persist="header"]') !== null;
+    const header             = isWrappedInPersist 
+                               ? headerEl.closest('[x-persist="header"]') 
+                               : headerEl;
 
-    if (!header || header.tagName !== 'HEADER') return;
+    if (!header) return;
 
     const isSticky     = block.dataset.sticky === 'true';
     const bottomOffset = block.dataset.bottomOffset === 'true';
