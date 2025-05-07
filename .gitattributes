@@ -11,3 +11,4 @@ README.md export-ignore
 # Exclude package managers' config
 package.json export-ignore
 package-lock.json export-ignore
+composer.lock export-ignore
