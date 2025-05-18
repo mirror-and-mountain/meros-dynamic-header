@@ -39,7 +39,7 @@ export function Controls ({ attributes, setAttributes }) {
 
     return (
         <InspectorControls>
-            <ToolsPanel label="Positioning" resetAll={ handlePositionReset }>
+            <ToolsPanel label={__( 'Positioning', 'meros-dynamic-header' )} resetAll={ handlePositionReset }>
                 <ToolsPanelItem
                     label={__('Sticky', 'meros-dynamic-header' )}
                     hasValue={() => 
@@ -109,7 +109,7 @@ export function Controls ({ attributes, setAttributes }) {
                 { isOverlay  &&(
                     <>
                         <ToolsPanelItem
-                            label={__('Background Start Colour')}
+                            label={__('Background Start Colour', 'meros-dynamic-header')}
                             hasValue={() => 
                                 backgroundStartColor !== '#FFFFFF00' ? true : false
                             }
@@ -122,14 +122,14 @@ export function Controls ({ attributes, setAttributes }) {
                         >
                             <OverlayColorPicker
                                 attribute="backgroundStartColor"
-                                label={__('Background Start Colour')}
+                                label={__('Background Start Colour', 'meros-dynamic-header')}
                                 currentColor={backgroundStartColor || '#FFFFFF00'}
                                 setAttributes={setAttributes}
                             />
                         </ToolsPanelItem>
 
                         <ToolsPanelItem
-                            label={__('Background End Colour')}
+                            label={__('Background End Colour', 'meros-dynamic-header')}
                             hasValue={() => 
                                 backgroundEndColor !== '#FFFFFF' ? true : false
                             }
@@ -142,14 +142,14 @@ export function Controls ({ attributes, setAttributes }) {
                         >
                             <OverlayColorPicker
                                 attribute="backgroundEndColor"
-                                label={__('Background End Colour')}
+                                label={__('Background End Colour', 'meros-dynamic-header')}
                                 currentColor={backgroundEndColor || '#FFFFFF00'}
                                 setAttributes={setAttributes}
                             />
                         </ToolsPanelItem>
 
                         <ToolsPanelItem
-                            label={__('Text Start Colour')}
+                            label={__('Text Start Colour', 'meros-dynamic-header')}
                             hasValue={() => 
                                 textStartColor !== '#000000' ? true : false
                             }
@@ -162,14 +162,14 @@ export function Controls ({ attributes, setAttributes }) {
                         >
                             <OverlayColorPicker
                                 attribute="textStartColor"
-                                label={__('Text Start Colour')}
+                                label={__('Text Start Colour', 'meros-dynamic-header')}
                                 currentColor={textStartColor || '#000000'}
                                 setAttributes={setAttributes}
                             />
                         </ToolsPanelItem>
 
                         <ToolsPanelItem
-                            label={__('Text End Colour')}
+                            label={__('Text End Colour', 'meros-dynamic-header')}
                             hasValue={() => 
                                 textEndColor !== '#000000' ? true : false
                             }
@@ -182,7 +182,7 @@ export function Controls ({ attributes, setAttributes }) {
                         >
                             <OverlayColorPicker
                                 attribute="textEndColor"
-                                label={__('Text End Colour')}
+                                label={__('Text End Colour', 'meros-dynamic-header')}
                                 currentColor={textEndColor || '#000000'}
                                 setAttributes={setAttributes}
                             />
