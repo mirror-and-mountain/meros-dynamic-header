@@ -4,6 +4,7 @@ function meros_dh_define_constants(): void {
     defined('MEROS_DH_PATH') || define('MEROS_DH_PATH', dirname(__DIR__));
 }
 
+// Register the block.
 function meros_dh_register_blocks() {
 
     $blocks_path = wp_normalize_path(MEROS_DH_PATH . '/build');

@@ -1,5 +1,9 @@
 <?php 
 
+/**
+ * Gets the theme's 'blockGap' property and adds it as an HTML attribute
+ * to the dynamic header block. Used to calculate header spacing.
+ */
 add_filter('render_block_meros/dynamic-header', function ( $block_content, $block ) {
 
     if ( empty( $block_content ) ) {
