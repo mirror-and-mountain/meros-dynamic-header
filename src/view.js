@@ -21,9 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const blockGap     = block.dataset.blockGap;
 
     if (isSticky) {
+        const adminBar = document.getElementById('wpadminbar');
+        const adminBarHeight = adminBar ? adminBar.offsetHeight : 0;
+
         header.style.position = 'sticky';
-        header.style.top = 0;
-        header.style.zIndex = 50
+        header.style.top = adminBarHeight + 'px';
+        header.style.zIndex = 50;
     }
 
     if (bottomOffset || isSticky) {
