@@ -23,6 +23,10 @@ add_filter('render_block_meros/dynamic-header', function ( $block_content, $bloc
     
 }, 10, 2 ); 
 
+/**
+ * Adds a class and data attributes to the navigation block
+ * when the sliding menu is enabled.
+ */
 add_filter('render_block_core/navigation', function ($block_content, $block) {
     if (empty($block['attrs']['enableSlidingMenu'])) {
         return $block_content;
