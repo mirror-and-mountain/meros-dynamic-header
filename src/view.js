@@ -4,6 +4,19 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle sliding menu
+    const slidingMenu = document.querySelector('.has-sliding-menu');
+    if (slidingMenu) {
+        const slidingMenuBackgroundColor = slidingMenu.dataset.slidingMenuBackgroundColor || '#FFFFFF';
+        const slidingMenuTextColor       = slidingMenu.dataset.slidingMenuTextColor || '#000000';
+        const slidingMenuContainer       = slidingMenu.querySelector('.wp-block-navigation__responsive-container');
+        if (slidingMenuContainer) {
+            slidingMenuContainer.style.setProperty('background-color', slidingMenuBackgroundColor, 'important');
+            slidingMenuContainer.style.setProperty('color', slidingMenuTextColor, 'important');
+        }
+    }
+
+    // Handle the dynamic header block
     const block    = document.querySelector('.wp-block-meros-dynamic-header');
     const headerEl = block?.parentElement;
     if (!headerEl || headerEl.tagName !== 'HEADER') return;

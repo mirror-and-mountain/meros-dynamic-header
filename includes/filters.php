@@ -22,3 +22,27 @@ add_filter('render_block_meros/dynamic-header', function ( $block_content, $bloc
     return $processor->get_updated_html();
     
 }, 10, 2 ); 
+
+add_filter('render_block_core/navigation', function ($block_content, $block) {
+    if (empty($block['attrs']['enableSlidingMenu'])) {
+        return $block_content;
+    }
+
+    // Use WP_HTML_Tag_Processor to find and modify the <nav> element
+    $processor = new WP_HTML_Tag_Processor($block_content);
+
+    if ($processor->next_tag('nav')) {
+        // Add the class
+        $existing_class = $processor->get_attribute('class') ?: '';
+        $processor->set_attribute('class', trim("$existing_class has-sliding-menu"));
+
+        // Add data attributes
+        $attrs = $block['attrs'];
+        $processor->set_attribute('data-sliding-menu', 'true');
+        $processor->set_attribute('data-sliding-menu-type', $attrs['slidingMenuType'] ?? 'slide-left');
+        $processor->set_attribute('data-sliding-menu-background-color', $attrs['slidingMenuBackgroundColor'] ?? '#FFFFFF');
+        $processor->set_attribute('data-sliding-menu-text-color', $attrs['slidingMenuTextColor'] ?? '#000000');
+    }
+
+    return $processor->get_updated_html();
+}, 10, 2);

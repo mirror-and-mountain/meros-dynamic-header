@@ -4,13 +4,14 @@ import { useEffect } from '@wordpress/element';
 import { select, dispatch } from '@wordpress/data';
 
 import { Controls } from './components/controls.js';
+import './navigation.js';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
     const { 
         isSticky, 
         bottomOffset, 
-        isOverlay, 
+        isOverlay,
         backgroundStartColor, 
         backgroundEndColor,
         textStartColor,
