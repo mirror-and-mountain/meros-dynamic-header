@@ -4,7 +4,7 @@ import { useEffect } from '@wordpress/element';
 import { select, dispatch } from '@wordpress/data';
 
 import { Controls } from './components/controls.js';
-import './navigation.js';
+import './meros-nav.js';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 

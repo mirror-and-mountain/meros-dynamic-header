@@ -1,0 +1,140 @@
+@mixin meros-nav-base {
+    // Base styles
+    .wp-block-navigation__responsive-container {
+        position: fixed !important;
+        top: 0;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 80vw !important;
+        max-width: 500px !important;
+        height: 100vh !important;
+        background: #fff !important;
+        z-index: 100002 !important;
+        overflow-y: auto !important;
+        will-change: transform;
+        animation: none !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+
+        // Animates the menu opening from the left
+        &.meros-nav-direction-left {
+            right: 0 !important;
+            left: auto !important;
+            transform: translateX(100%) !important;
+            box-shadow: -2px 0 12px rgba(0, 0, 0, 0.12) !important;
+            transition: transform 0.4s cubic-bezier(.77, 0, .18, 1);
+
+            &.is-menu-open {
+            transform: translateX(0) !important;
+            }
+        }
+
+        // Animates the menu opening from the right
+        &.meros-nav-direction-right {
+            left: 0 !important;
+            right: auto !important;
+            transform: translateX(-100%) !important;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12) !important;
+            transition: transform 0.4s cubic-bezier(.77, 0, .18, 1);
+
+            &.is-menu-open {
+            transform: translateX(0) !important;
+            }
+        }
+    }
+
+    .wp-block-navigation__responsive-container .meros-nav-logo {
+        padding: 10px 10px 0 20px;
+        width: 60px;
+    }
+
+    // Styles the close button in the responsive container
+    .wp-block-navigation__responsive-container-close {
+        position: absolute;
+        right: 20px;
+        padding-top: 20px !important;
+        left: auto;
+        font-size: 2rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 1101;
+    }
+
+    .wp-block-navigation__responsive-container-content {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition-delay: 0.1s;
+    }
+
+    .wp-block-navigation__responsive-container ul,
+    .wp-block-navigation__responsive-container li,
+    .wp-block-navigation__responsive-container a,
+    .wp-block-navigation__responsive-container .wp-block-navigation-item__content {
+        text-align: left !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+    }
+
+    a.wp-block-navigation-item__content,
+    button.wp-block-navigation-item__content {
+        padding-left: 20px !important;
+        padding-right: 0 !important;
+        display: flex;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        align-items: center;
+    }
+
+    .wp-block-navigation__submenu-icon {
+        display: inline-block !important;
+        margin-top: -15px;
+    }
+
+    .wp-block-navigation__submenu-icon svg {
+        margin-left: -25px;
+    }
+
+    .wp-block-navigation__submenu-container {
+        display: block !important;
+        position: static !important;
+        margin: 0 !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: max-height 0.3s cubic-bezier(.4, 0, .2, 1), opacity 0.2s;
+    }
+
+    .wp-block-navigation__submenu-container li {
+        margin: 0 !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        min-height: 0 !important;
+    }
+
+    .wp-block-navigation-submenu__toggle[aria-expanded="true"]~.wp-block-navigation__submenu-container {
+        max-height: 500px !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .wp-block-navigation-submenu__toggle[aria-expanded="false"]~.wp-block-navigation__submenu-container {
+        max-height: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+}

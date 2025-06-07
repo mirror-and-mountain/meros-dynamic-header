@@ -24,29 +24,51 @@ add_filter('render_block_meros/dynamic-header', function ( $block_content, $bloc
 }, 10, 2 ); 
 
 /**
- * Adds a class and data attributes to the navigation block
- * when the sliding menu is enabled.
+ * Adds classes and data attributes to the navigation block
+ * when meros nav is enabled.
  */
 add_filter('render_block_core/navigation', function ($block_content, $block) {
-    if (empty($block['attrs']['enableSlidingMenu'])) {
+    if (empty($block['attrs']['enableMerosNav'])) {
         return $block_content;
     }
 
-    // Use WP_HTML_Tag_Processor to find and modify the <nav> element
     $processor = new WP_HTML_Tag_Processor($block_content);
 
     if ($processor->next_tag('nav')) {
-        // Add the class
-        $existing_class = $processor->get_attribute('class') ?: '';
-        $processor->set_attribute('class', trim("$existing_class has-sliding-menu"));
+        $existing_class      = $processor->get_attribute('class') ?: '';
+        $overlay_menu        = $block['attrs']['overlayMenu'] ?? 'mobile';
+        $meros_nav_style     = $block['attrs']['merosNavStyle'] ?? 'minimal';
+        $processor->set_attribute('class', trim("$existing_class has-meros-nav-$overlay_menu meros-nav-style-$meros_nav_style"));
 
-        // Add data attributes
         $attrs = $block['attrs'];
-        $processor->set_attribute('data-sliding-menu', 'true');
-        $processor->set_attribute('data-sliding-menu-type', $attrs['slidingMenuType'] ?? 'slide-left');
-        $processor->set_attribute('data-sliding-menu-background-color', $attrs['slidingMenuBackgroundColor'] ?? '#FFFFFF');
-        $processor->set_attribute('data-sliding-menu-text-color', $attrs['slidingMenuTextColor'] ?? '#000000');
+        $processor->set_attribute('data-meros-nav-background-color', $attrs['merosNavBgColor'] ?? '#FFFFFF');
+        $processor->set_attribute('data-meros-nav-text-color', $attrs['merosNavTextColor'] ?? '#000000');
+
+        if ($attrs['merosNavShowLogo'] ?? true) {
+            $custom_logo_id = get_theme_mod('custom_logo');
+            if ($custom_logo_id) {
+                $logo_image = wp_get_attachment_image_src($custom_logo_id, 'full'); // size can be 'full', 'thumbnail', etc.
+                $logo_url = $logo_image[0] ?? false; // URL is first element
+                if ($logo_url) {
+                    $processor->set_attribute('data-meros-nav-logo', esc_url($logo_url));
+                }
+            }
+        }
+    }
+
+    while ($processor->next_tag()) {
+        $class = $processor->get_attribute('class') ?: '';
+        $classList = explode(' ', $class);
+        foreach ($classList as $c) {
+            if ($c === 'wp-block-navigation__responsive-container') {
+                $existing_class      = $class;
+                $meros_nav_direction = $block['attrs']['merosNavDirection'] ?? 'left';
+                $processor->set_attribute('class', trim("$existing_class meros-nav-direction-$meros_nav_direction"));
+                break 2;
+            }
+        }
     }
 
     return $processor->get_updated_html();
 }, 10, 2);
+

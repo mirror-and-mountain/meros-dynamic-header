@@ -1,1 +1,13 @@
-@use './styles/navigation-block';
+@use './styles/meros-nav-base' as *;
+
+// Always show styles regardless of screen size
+.has-meros-nav-always {
+  @include meros-nav-base;
+}
+
+// Only show styles on mobile
+@media (max-width: 599px) {
+  .has-meros-nav-mobile {
+    @include meros-nav-base;
+  }
+}
