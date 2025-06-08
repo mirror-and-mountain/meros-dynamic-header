@@ -43,6 +43,7 @@ add_filter('render_block_core/navigation', function ($block_content, $block) {
         $attrs = $block['attrs'];
         $processor->set_attribute('data-meros-nav-direction', $attrs['merosNavDirection'] ?? 'left');
         $processor->set_attribute('data-meros-nav-background-color', $attrs['merosNavBgColor'] ?? '#FFFFFF');
+        $processor->set_attribute('data-meros-nav-highlight-color', $attrs['merosNavHighlightColor'] ?? '#F0F0F0');
         $processor->set_attribute('data-meros-nav-text-color', $attrs['merosNavTextColor'] ?? '#000000');
 
         if ($attrs['merosNavShowLogo'] ?? true) {
@@ -52,6 +53,7 @@ add_filter('render_block_core/navigation', function ($block_content, $block) {
                 $logo_url = $logo_image[0] ?? false; // URL is first element
                 if ($logo_url) {
                     $processor->set_attribute('data-meros-nav-logo', esc_url($logo_url));
+                    $processor->set_attribute('data-meros-nav-logo-link', esc_url(site_url()));
                 }
             }
         }

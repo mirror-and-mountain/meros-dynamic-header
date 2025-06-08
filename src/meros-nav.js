@@ -20,6 +20,7 @@ wp.domReady(() => {
                 merosNavStyle: { type: 'string', default: 'minimal' },
                 merosNavBgColor: { type: 'string', default: '#FFFFFF' },
                 merosNavTextColor: { type: 'string', default: '#000000' },
+                merosNavHighlightColor: { type: 'string', default: '#f0f0f0' },
                 merosNavShowLogo: { type: 'boolean', default: true }
             }
         };
@@ -43,7 +44,17 @@ wp.domReady(() => {
                             <ToggleControl
                                 label={__('Enable Meros Navigation', 'meros-dynamic-header')}
                                 checked={attributes.enableMerosNav}
-                                onChange={(value) => setAttributes({ enableMerosNav: value })}
+                                onChange={(value) => {
+                                    setAttributes({ enableMerosNav: value })
+                                    if (value) {
+                                        if (!attributes.openSubmenusOnClick) {
+                                            setAttributes({ openSubmenusOnClick: true });
+                                        }
+                                        if (!attributes.showSubmenuIcon) {
+                                            setAttributes({ showSubmenuIcon: true });
+                                        }
+                                    }
+                                }}
                             />
                             {attributes.enableMerosNav && (
                                 <>
@@ -73,6 +84,12 @@ wp.domReady(() => {
                                         attribute="merosNavBgColor"
                                         label={__('Background Color', 'meros-dynamic-header')}
                                         currentColor={attributes.merosNavBgColor}
+                                        setAttributes={setAttributes}
+                                    />
+                                    <OverlayColorPicker
+                                        attribute="merosNavHighlightColor"
+                                        label={__('Highlight Color', 'meros-dynamic-header')}
+                                        currentColor={attributes.merosNavHighlightColor}
                                         setAttributes={setAttributes}
                                     />
                                     <OverlayColorPicker

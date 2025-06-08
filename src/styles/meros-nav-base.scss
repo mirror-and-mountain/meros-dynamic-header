@@ -11,6 +11,7 @@
         background: #fff !important;
         z-index: 100002 !important;
         overflow-y: auto !important;
+        overflow-x: hidden !important;
         will-change: transform;
         animation: none !important;
         opacity: 1 !important;
@@ -59,7 +60,10 @@
         
         .meros-nav-logo {
             padding: 10px 10px 0 20px;
-            width: 50px;
+
+            a img {
+                width: 60px;
+            }
         }
         
         .wp-block-navigation__responsive-container-close {
@@ -97,21 +101,13 @@
             flex-direction: row;
             width: 100%;
             padding: 15px 10px 15px 20px;
-
-            &:hover,
-            &:focus,
-            &:active {
-                background: lightgray !important;
-            }
-
-            &.current-menu-item {
-                background: lightgray !important;
-            }
+            border-bottom: 1px solid #e5e5e5;
         }
     }
 
     .wp-block-navigation__submenu-icon {
         display: inline-block !important;
+        margin-left: 2px !important;
     }
 
     .wp-block-navigation__responsive-container.is-menu-open 
