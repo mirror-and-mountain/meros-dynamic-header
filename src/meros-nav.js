@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl, SelectControl, RangeControl } from '@wordpress/components';
+import { PanelBody, ToggleControl, SelectControl } from '@wordpress/components';
 import { Fragment } from '@wordpress/element';
 
 import { OverlayColorPicker } from './components/color-picker';
@@ -21,6 +21,7 @@ wp.domReady(() => {
                 merosNavBgColor: { type: 'string', default: '#FFFFFF' },
                 merosNavTextColor: { type: 'string', default: '#000000' },
                 merosNavHighlightColor: { type: 'string', default: '#f0f0f0' },
+                merosNavHighlightStyle: { type: 'string', default: 'none' },
                 merosNavShowLogo: { type: 'boolean', default: true }
             }
         };
@@ -63,18 +64,19 @@ wp.domReady(() => {
                                         value={attributes.merosNavDirection}
                                         options={[
                                             { label: __('Slide Left', 'meros-dynamic-header'), value: 'left' },
-                                            { label: __('Slide Right', 'meros-dynamic-header'), value: 'right' }
+                                            { label: __('Slide Right', 'meros-dynamic-header'), value: 'right' },
+                                            { label: __('Slide From Top', 'meros-dynamic-header'), value: 'top' }
                                         ]}
                                         onChange={(value) => setAttributes({ merosNavDirection: value })}
                                     />
-                                    <SelectControl
+                                    {/* <SelectControl
                                         label={__('Style', 'meros-dynamic-header')}
                                         value={attributes.merosNavStyle}
                                         options={[
                                             { label: __('Minimal', 'meros-dynamic-header'), value: 'minimal' }
                                         ]}
                                         onChange={(value) => setAttributes({ merosNavStyle: value })}
-                                    />
+                                    /> */}
                                     <ToggleControl
                                         label={__('Show Site Logo', 'meros-dynamic-header')}
                                         checked={attributes.merosNavShowLogo}
@@ -97,6 +99,19 @@ wp.domReady(() => {
                                         label={__('Text Color', 'meros-dynamic-header')}
                                         currentColor={attributes.merosNavTextColor}
                                         setAttributes={setAttributes}
+                                    />
+                                    <div style={{ height: '16px' }} />
+                                    <SelectControl
+                                        label={__('Highlight Style', 'meros-dynamic-header')}
+                                        help={__('This setting only applies on navigation items in a desktop view.', 'meros-dynamic-header')}
+                                        value={attributes.merosNavHighlightStyle}
+                                        options={[
+                                            { label: __('None', 'meros-dynamic-header'), value: 'none' },
+                                            { label: __('Solid', 'meros-dynamic-header'), value: 'solid' },
+                                            { label: __('Dotted', 'meros-dynamic-header'), value: 'dotted' },
+                                            { label: __('Dashed', 'meros-dynamic-header'), value: 'dashed' }
+                                        ]}
+                                        onChange={(value) => setAttributes({ merosNavHighlightStyle: value })}
                                     />
                                 </>
                             )}

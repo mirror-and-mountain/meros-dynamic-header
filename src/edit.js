@@ -9,7 +9,8 @@ import './editor.scss';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const { 
+    const {
+        tagName, 
         isSticky, 
         bottomOffset, 
         isOverlay,
@@ -18,6 +19,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         textStartColor,
         textEndColor 
     } = attributes;
+
+    const Tag = tagName || 'header';
 
     useEffect(() => {
         const block = select('core/block-editor').getBlock(clientId);
@@ -37,7 +40,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 setAttributes={setAttributes}
             />
 
-            <div {...useBlockProps()} 
+            <Tag {...useBlockProps()} 
                 data-sticky={ isSticky }
                 data-bottom-offset={ bottomOffset }
                 data-overlay={ isOverlay }
@@ -59,7 +62,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         ]}
                     />
                 </div>
-            </div>
+            </Tag>
         </>
     );
 }

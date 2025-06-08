@@ -3,7 +3,9 @@ import { InspectorControls } from '@wordpress/block-editor';
 import {
     __experimentalToolsPanel as ToolsPanel,
     __experimentalToolsPanelItem as ToolsPanelItem,
-    ToggleControl
+    ToggleControl,
+    SelectControl,
+    PanelBody
 } from '@wordpress/components';
 
 import { OverlayColorPicker } from './color-picker.js';
@@ -11,6 +13,7 @@ import { OverlayColorPicker } from './color-picker.js';
 export function Controls ({ attributes, setAttributes }) {
 
     const { 
+        tagName,
         isSticky, 
         bottomOffset, 
         isOverlay, 
@@ -190,6 +193,18 @@ export function Controls ({ attributes, setAttributes }) {
                     </>
                 )}
             </ToolsPanel>
+
+            <PanelBody title={__('Tag Selection', 'meros-dynamic-header')} initialOpen={false}>
+                <SelectControl
+                    label={__('Element Tag', 'meros-dynamic-header')}
+                    value={tagName}
+                    options={[
+                        { label: __('header', 'meros-dynamic-header'), value: 'header' },
+                        { label: __('div', 'meros-dynamic-header'), value: 'div' }
+                    ]}
+                    onChange={(value) => setAttributes({ tagName: value })}
+                />
+            </PanelBody>
         </InspectorControls>
     );
 }

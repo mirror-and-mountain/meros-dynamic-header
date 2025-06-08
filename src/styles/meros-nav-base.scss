@@ -5,8 +5,6 @@
         top: 0;
         display: flex !important;
         justify-content: flex-start;
-        width: 80vw !important;
-        max-width: 320px !important;
         height: 100vh !important;
         background: #fff !important;
         z-index: 100002 !important;
@@ -21,6 +19,8 @@
         &.meros-nav-direction-left {
             right: 0 !important;
             left: auto !important;
+            width: 80vw !important;
+            max-width: 320px !important;
             transform: translateX(100%) !important;
             box-shadow: -2px 0 12px rgba(0, 0, 0, 0.12) !important;
             transition: transform 0.4s cubic-bezier(.77, 0, .18, 1);
@@ -34,12 +34,28 @@
         &.meros-nav-direction-right {
             left: 0 !important;
             right: auto !important;
+            width: 80vw !important;
+            max-width: 320px !important;
             transform: translateX(-100%) !important;
             box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12) !important;
             transition: transform 0.4s cubic-bezier(.77, 0, .18, 1);
 
             &.is-menu-open {
             transform: translateX(0) !important;
+            }
+        }
+
+        // Animates the menu opening from the right
+        &.meros-nav-direction-top {
+            left: 0 !important;
+            right: auto !important;
+            width: 100% !important;
+            transform: translateY(-100%) !important;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12) !important;
+            transition: transform 0.4s cubic-bezier(.77, 0, .18, 1);
+
+            &.is-menu-open {
+            transform: translateY(0) !important;
             }
         }
     }
@@ -113,6 +129,7 @@
     .wp-block-navigation__responsive-container.is-menu-open 
     .wp-block-navigation__responsive-container-content 
     .has-child .wp-block-navigation__submenu-container {
+        right: 0;
         position: absolute;
         padding: 0;
         width: 100%;

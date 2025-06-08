@@ -2,7 +2,8 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 export default function save({attributes}) {
 
-    const { 
+    const {
+        tagName,
         isSticky, 
         bottomOffset, 
         isOverlay, 
@@ -12,8 +13,10 @@ export default function save({attributes}) {
         textEndColor
     } = attributes;
 
+    const Tag = tagName || 'header';
+
     return (
-        <div {...useBlockProps.save()}
+        <Tag {...useBlockProps.save()}
             data-sticky={ isSticky }
             data-bottom-offset={ bottomOffset }
             data-overlay={ isOverlay }
@@ -23,6 +26,6 @@ export default function save({attributes}) {
             data-text-end={ isOverlay ? textEndColor : '' }
         >
             <InnerBlocks.Content />
-        </div>
+        </Tag>
     );
 }

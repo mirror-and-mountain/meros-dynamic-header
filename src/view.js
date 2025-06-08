@@ -5,18 +5,15 @@ import './view.scss';
 gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
-
     setupMerosNav();
 
-    // Handle the dynamic header block
     const block = document.querySelector('.wp-block-meros-dynamic-header');
-    const headerEl = block?.parentElement;
-    if (!headerEl || headerEl.tagName !== 'HEADER') return;
+    if (!block) return;
+    const isWrappedInPersist = block.closest('[x-persist="header"]') !== null;
 
-    const isWrappedInPersist = headerEl.closest('[x-persist="header"]') !== null;
     const header = isWrappedInPersist
-        ? headerEl.closest('[x-persist="header"]')
-        : headerEl;
+        ? block.closest('[x-persist="header"]')
+        : block;
 
     if (!header) return;
 
@@ -26,21 +23,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const blockGap = block.dataset.blockGap;
 
     if (isSticky) {
-        const adminBar = document.getElementById('wpadminbar');
-        const adminBarHeight = adminBar ? adminBar.offsetHeight : 0;
+        requestAnimationFrame(() => {
+            const adminBar = document.getElementById('wpadminbar');
+            const adminBarHeight = adminBar ? adminBar.offsetHeight : 0;
 
-        header.style.position = 'sticky';
-        header.style.top = adminBarHeight + 'px';
-        header.style.zIndex = 50;
+            header.style.position = 'sticky';
+            header.style.top = adminBarHeight + 'px';
+            header.style.zIndex = '50';
+        });
     }
 
+
     if (bottomOffset || isSticky) {
-        header.style.marginBottom = '-' + blockGap;
+        if (blockGap) {
+            header.style.marginBottom = '-' + blockGap;
+        }
     }
 
     if (isOverlay) {
         let unit = 'rem';
-        const bottomMargin = header.style.marginBottom;
+        const bottomMargin = header.style.marginBottom || '0';
         let height = header.offsetHeight;
 
         if (bottomMargin.endsWith(unit)) {
@@ -87,11 +89,11 @@ function setupMerosNav() {
     const mql = window.matchMedia(mobileBreakpoint);
 
     function setTopSection(e) {
-        const existing     = merosNavContainer.querySelector('.meros-nav-top-section');
-        const container    = merosNavContainer.querySelector('.wp-block-navigation__responsive-dialog');
-        const closeButton  = container.querySelector('.wp-block-navigation__responsive-container-close');
-        const logoSrc      = merosNav.dataset.merosNavLogo || null;
-        
+        const existing = merosNavContainer.querySelector('.meros-nav-top-section');
+        const container = merosNavContainer.querySelector('.wp-block-navigation__responsive-dialog');
+        const closeButton = container.querySelector('.wp-block-navigation__responsive-container-close');
+        const logoSrc = merosNav.dataset.merosNavLogo || null;
+
         if (e.matches || merosNav.classList.contains('has-meros-nav-always')) {
 
             if (existing || !container) return;
@@ -105,20 +107,20 @@ function setupMerosNav() {
             let logoLink = null;
             let logoElement = null;
             if (logoSrc) {
-                logoContainer           = document.createElement('div');
+                logoContainer = document.createElement('div');
                 logoContainer.className = 'meros-nav-logo';
-                logoLink                = document.createElement('a');
-                logoLink.href           = merosNav.dataset.merosNavLogoLink || '#';
-                logoElement             = document.createElement('img');
-                logoElement.src         = logoSrc;
-                logoElement.alt         = 'Site Logo';
+                logoLink = document.createElement('a');
+                logoLink.href = merosNav.dataset.merosNavLogoLink || '#';
+                logoElement = document.createElement('img');
+                logoElement.src = logoSrc;
+                logoElement.alt = 'Site Logo';
                 logoLink.appendChild(logoElement);
                 logoContainer.appendChild(logoLink);
             }
 
             // Prepent the top section to the container
             container.prepend(topSection);
-            
+
             // Append/Prpend the close button and logo based on direction
             if (closeButton && logoContainer) {
                 topSection.appendChild(closeButton);
@@ -139,84 +141,142 @@ function setupMerosNav() {
         }
     }
 
-    function onEnter(e) {
-        e.currentTarget.style.setProperty('background-color', merosNavHighlightColor, 'important');
-    }
-    function onLeave(e) {
-        e.currentTarget.style.removeProperty('background-color');
-    }
-    function onFocus(e) {
-        e.currentTarget.style.setProperty('background-color', merosNavHighlightColor, 'important');
-    }
-    function onBlur(e) {
-        e.currentTarget.style.removeProperty('background-color');
-    }
-    function onMouseDown(e) {
-        e.currentTarget.style.setProperty('background-color', merosNavHighlightColor, 'important');
-    }
-    function onMouseUp(e) {
-        e.currentTarget.style.setProperty('background-color', merosNavHighlightColor, 'important');
-    }
-
-
-    function applyColors(e) {
+    function applyStyles(e) {
         const merosNavBackgroundColor = merosNav.dataset.merosNavBackgroundColor || '#FFFFFF';
         const merosNavTextColor = merosNav.dataset.merosNavTextColor || '#000000';
         const navContainers = merosNavContainer.querySelectorAll('.wp-block-navigation-item') || [];
         const navItems = merosNavContainer.querySelectorAll('.wp-block-navigation-item__content') || [];
-        
+        const highlightStyle = merosNav.dataset.merosNavHighlightStyle || 'solid';
+        const highlightColor = merosNavHighlightColor;
+        const highlightThickness = '2px';
+
+        // Set default transparent border to prevent shifting
+        const initBorder = el => el.style.setProperty('border-bottom', `${highlightThickness} ${highlightStyle} transparent`, 'important');
+
+        const setBorderColor = (el, color) => el.style.setProperty('border-bottom-color', color, 'important');
+        const removeBorderColor = el => el.style.setProperty('border-bottom-color', 'transparent', 'important');
+
+        const setBackground = el => el.style.setProperty('background-color', highlightColor, 'important');
+        const removeBackground = el => el.style.removeProperty('background-color');
+
+        const widenBorderSpan = el => el.style.setProperty('padding-inline', '0.2rem', 'important');
+
+        const handleEnter = e => {
+            setBackground(e.currentTarget);
+            setBorderColor(e.currentTarget, highlightColor);
+        };
+        const handleLeave = e => {
+            removeBackground(e.currentTarget);
+            const isCurrent = e.currentTarget.classList.contains('current-menu-item');
+            if (!isCurrent) removeBorderColor(e.currentTarget);
+        };
+        const handleMouseDown = e => setBackground(e.currentTarget);
+        const handleMouseUp = e => setBackground(e.currentTarget);
+
+        const attachInteractiveListeners = el => {
+            el.removeEventListener('mouseenter', handleEnter);
+            el.removeEventListener('mouseleave', handleLeave);
+            el.removeEventListener('focus', handleEnter);
+            el.removeEventListener('blur', handleLeave);
+            el.removeEventListener('mousedown', handleMouseDown);
+            el.removeEventListener('mouseup', handleMouseUp);
+
+            el.addEventListener('mouseenter', handleEnter);
+            el.addEventListener('mouseleave', handleLeave);
+            el.addEventListener('focus', handleEnter);
+            el.addEventListener('blur', handleLeave);
+            el.addEventListener('mousedown', handleMouseDown);
+            el.addEventListener('mouseup', handleMouseUp);
+        };
+
         if (e.matches || merosNav.classList.contains('has-meros-nav-always')) {
             merosNavContainer.style.setProperty('background-color', merosNavBackgroundColor, 'important');
             merosNavContainer.style.setProperty('color', merosNavTextColor, 'important');
-            navItems.forEach((item) => {
-                if (item.tagName === 'A') {
-                    const normalizeUrl = url => url.replace(/\/+$/, '').replace(/#.*$/, '');
-                    const itemHref = normalizeUrl(item.href);
-                    const currentHref = normalizeUrl(window.location.href);
 
-                    const li = item.closest('li');
-                    if (!li) return;
+            navItems.forEach(item => {
+                if (item.tagName !== 'A') return;
 
-                    if (itemHref === currentHref) {
-                        li.classList.add('current-menu-item');
-                        li.style.setProperty('background-color', merosNavHighlightColor, 'important');
-                    } else {
-                        li.classList.remove('current-menu-item');
-                        li.style.removeProperty('background-color');
-                    }
+                const normalizeUrl = url => url.replace(/\/+$/, '').replace(/#.*$/, '');
+                const itemHref = normalizeUrl(item.href);
+                const currentHref = normalizeUrl(window.location.href);
+                const li = item.closest('li');
+                if (!li) return;
+
+                // Clean up styles from desktop mode
+                removeBorderColor(li);
+                li.style.removeProperty('padding-inline');
+
+                // Remove desktop listeners
+                if (li._applyBorder) {
+                    li.removeEventListener('mouseenter', li._applyBorder);
+                    li.removeEventListener('mouseleave', li._removeBorder);
+                    li.removeEventListener('focus', li._applyBorder);
+                    li.removeEventListener('blur', li._removeBorder);
+                    delete li._applyBorder;
+                    delete li._removeBorder;
+                }
+
+                const isCurrent = itemHref === currentHref;
+                li.classList.toggle('current-menu-item', isCurrent);
+
+                if (isCurrent) {
+                    setBackground(li);
+                } else {
+                    removeBackground(li);
                 }
             });
-            navContainers.forEach((item) => {
+
+            navContainers.forEach(item => {
                 if (item.tagName !== 'LI') return;
-                if (item.classList.contains('current-menu-item')) {
-                    item.style.setProperty('background-color', merosNavHighlightColor, 'important');
-                    return;
+
+                // Clean up any styling from desktop mode
+                removeBorderColor(item);
+                item.style.removeProperty('padding-inline');
+
+                const isCurrent = item.classList.contains('current-menu-item');
+                if (isCurrent) {
+                    setBackground(item);
+                } else {
+                    removeBackground(item);
+                    attachInteractiveListeners(item);
                 }
-                item.addEventListener('mouseenter', onEnter);
-                item.addEventListener('mouseleave', onLeave);
-                item.addEventListener('focus', onFocus);
-                item.addEventListener('blur', onBlur);
-                item.addEventListener('mousedown', onMouseDown);
-                item.addEventListener('mouseup', onMouseUp);
             });
-        } else {
-            // Remove styles when not in mobile view
+        }
+        else {
             merosNavContainer.style.removeProperty('background-color');
             merosNavContainer.style.removeProperty('color');
-            navItems.forEach((item) => {
-                if (item.tagName === 'A') {
-                    item.closest('li').classList.remove('current-menu-item');
+
+            navItems.forEach(item => {
+                if (item.tagName !== 'A') return;
+
+                const normalizeUrl = url => url.replace(/\/+$/, '').replace(/#.*$/, '');
+                const itemHref = normalizeUrl(item.href);
+                const currentHref = normalizeUrl(window.location.href);
+                const li = item.closest('li');
+                if (!li) return;
+
+                widenBorderSpan(li);
+                initBorder(li);
+
+                const isCurrent = itemHref === currentHref;
+                li.classList.toggle('current-menu-item', isCurrent);
+
+                if (!isCurrent) {
+                    removeBorderColor(li);
+                    li._applyBorder = () => setBorderColor(li, highlightColor);
+                    li._removeBorder = () => removeBorderColor(li);
+                    li.addEventListener('mouseenter', li._applyBorder);
+                    li.addEventListener('mouseleave', li._removeBorder);
+                    li.addEventListener('focus', li._applyBorder);
+                    li.addEventListener('blur', li._removeBorder);
+                } else {
+                    setBorderColor(li, highlightColor);
                 }
             });
-            navContainers.forEach((item) => {
+
+            navContainers.forEach(item => {
                 if (item.tagName !== 'LI') return;
-                item.style.removeProperty('background-color');
-                item.removeEventListener('mouseenter', onEnter);
-                item.removeEventListener('mouseleave', onLeave);
-                item.removeEventListener('focus', onFocus);
-                item.removeEventListener('blur', onBlur);
-                item.removeEventListener('mousedown', onMouseDown);
-                item.removeEventListener('mouseup', onMouseUp);
+                removeBackground(item);
             });
         }
     }
@@ -231,7 +291,7 @@ function setupMerosNav() {
 
     // Initial setup
     setTopSection(mql);
-    applyColors(mql);
+    applyStyles(mql);
     toggleTransitionTemporarily();
 
     // Listen for viewport changes
@@ -239,7 +299,7 @@ function setupMerosNav() {
         mql.addEventListener('change', (e) => {
             toggleTransitionTemporarily();
             setTopSection(e);
-            applyColors(e);
+            applyStyles(e);
         });
     }
 }

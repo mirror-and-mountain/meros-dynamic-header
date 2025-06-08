@@ -4,24 +4,27 @@
  * Gets the theme's 'blockGap' property and adds it as an HTML attribute
  * to the dynamic header block. Used to calculate header spacing.
  */
-add_filter('render_block_meros/dynamic-header', function ( $block_content, $block ) {
-
-    if ( empty( $block_content ) ) {
+add_filter('render_block_meros/dynamic-header', function ($block_content, $block) {
+    if (empty($block_content)) {
         return $block_content;
     }
 
-    $processor = new \WP_HTML_Tag_Processor( $block_content );
+    $block_spacing = wp_get_global_styles(['styles'])['spacing']['blockGap'] ?? null;
 
-    if ( $processor->next_tag( 'div' ) ) {
-        $block_spacing = wp_get_global_styles( ['styles'] )['spacing']['blockGap'];
+    if (! $block_spacing) {
+        return $block_content;
+    }
 
-        // Update the style attribute
-        $processor->set_attribute( 'data-block-gap', $block_spacing );
+    // Replace outermost wrapper if it’s really going to be <header>
+    $processor = new \WP_HTML_Tag_Processor($block_content);
+
+    if ($processor->next_tag(['div', 'header'])) {
+        $processor->set_attribute('data-block-gap', $block_spacing);
     }
 
     return $processor->get_updated_html();
-    
-}, 10, 2 ); 
+}, 10, 2);
+
 
 /**
  * Adds classes and data attributes to the navigation block
@@ -44,6 +47,7 @@ add_filter('render_block_core/navigation', function ($block_content, $block) {
         $processor->set_attribute('data-meros-nav-direction', $attrs['merosNavDirection'] ?? 'left');
         $processor->set_attribute('data-meros-nav-background-color', $attrs['merosNavBgColor'] ?? '#FFFFFF');
         $processor->set_attribute('data-meros-nav-highlight-color', $attrs['merosNavHighlightColor'] ?? '#F0F0F0');
+        $processor->set_attribute('data-meros-nav-highlight-style', $attrs['merosNavHighlightStyle'] ?? 'none');
         $processor->set_attribute('data-meros-nav-text-color', $attrs['merosNavTextColor'] ?? '#000000');
 
         if ($attrs['merosNavShowLogo'] ?? true) {
