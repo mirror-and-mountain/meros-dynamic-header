@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import './view.scss';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -78,6 +79,7 @@ function setupMerosNav() {
     const merosNav = document.querySelector('[class*="has-meros-nav-"]');
     if (!merosNav) return;
 
+    const merosNavDirection = merosNav.dataset.merosNavDirection || 'left';
     const merosNavBackgroundColor = merosNav.dataset.merosNavBackgroundColor || '#FFFFFF';
     const merosNavTextColor = merosNav.dataset.merosNavTextColor || '#000000';
     const siteLogo = merosNav.dataset.merosNavLogo || null;
@@ -87,22 +89,59 @@ function setupMerosNav() {
     const mobileBreakpoint = '(max-width: 599px)';
     const mql = window.matchMedia(mobileBreakpoint);
 
-    function setLogo(e) {
-        if (!siteLogo) return; 
+    function setTopSection(e) {
         if (e.matches || merosNav.classList.contains('has-meros-nav-always')) {
-            const existingLogo = merosNavContainer.querySelector('.meros-nav-logo');
-            if (existingLogo) return;
-            const logoElement = document.createElement('img');
-            logoElement.className = 'meros-nav-logo';
-            logoElement.src = siteLogo;
-            logoElement.alt = 'Site Logo';
-            merosNavContainer.querySelector('.wp-block-navigation__responsive-dialog').prepend(logoElement);
-        } else {
-            const existingLogo = merosNavContainer.querySelector('.meros-nav-logo');
-            if (existingLogo) {
-                existingLogo.remove();
+            const existing = merosNavContainer.querySelector('.meros-nav-top-section');
+            const container = merosNavContainer.querySelector('.wp-block-navigation__responsive-dialog');
+            if (existing || !container) return;
+
+            const topSection = document.createElement('div');
+            topSection.className = 'meros-nav-top-section';
+
+            const closeButton = container.querySelector('.wp-block-navigation__responsive-container-close') || null;
+            const menuButton  = merosNav.querySelector('.wp-block-navigation__responsive-container-open') || null;
+
+            // come back to this later
+            if (closeButton && menuButton) {
+                menuButton.addEventListener('click', () => {
+                    const modalOpen = document.documentElement.classList.contains('has-modal-open');
+                    if (modalOpen) {
+                        console.log('working so far');
+                        closeButton.click();
+                    }
+                });
             }
-        }
+
+            let logoElement;
+            if (siteLogo) {
+                logoElement = document.createElement('img');
+                logoElement.className = 'meros-nav-logo';
+                logoElement.src = siteLogo;
+                logoElement.alt = 'Site Logo';
+            } else {
+                logoElement = null;
+            }
+
+            container.prepend(topSection);
+            
+            if (closeButton && logoElement) {
+                if (merosNavDirection === 'left') {
+                    topSection.appendChild(logoElement);
+                    topSection.prepend(closeButton);
+                } else {
+                    topSection.appendChild(closeButton);
+                    topSection.prepend(logoElement);
+                }
+            } else if (closeButton && !logoElement) {
+                topSection.appendChild(closeButton);
+            }
+        } 
+        // else {
+        //     const existingLogo = merosNavContainer.querySelector('.meros-nav-logo');
+        //     if (existingLogo) {
+        //         existingLogo.remove();
+        //     }
+        // }
     }
 
     function applyColors(e) {
@@ -124,7 +163,7 @@ function setupMerosNav() {
     }
 
     // Initial setup
-    setLogo(mql);
+    setTopSection(mql);
     applyColors(mql);
     toggleTransitionTemporarily();
 
@@ -132,7 +171,7 @@ function setupMerosNav() {
     if (typeof mql.addEventListener === 'function') {
         mql.addEventListener('change', (e) => {
             toggleTransitionTemporarily();
-            setLogo(e);
+            setTopSection(e);
             applyColors(e);
         });
     }

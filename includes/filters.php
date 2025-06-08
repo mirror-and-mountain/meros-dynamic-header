@@ -41,6 +41,7 @@ add_filter('render_block_core/navigation', function ($block_content, $block) {
         $processor->set_attribute('class', trim("$existing_class has-meros-nav-$overlay_menu meros-nav-style-$meros_nav_style"));
 
         $attrs = $block['attrs'];
+        $processor->set_attribute('data-meros-nav-direction', $attrs['merosNavDirection'] ?? 'left');
         $processor->set_attribute('data-meros-nav-background-color', $attrs['merosNavBgColor'] ?? '#FFFFFF');
         $processor->set_attribute('data-meros-nav-text-color', $attrs['merosNavTextColor'] ?? '#000000');
 

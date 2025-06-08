@@ -9,6 +9,7 @@
   "description": "",
   "textdomain": "meros-dynamic-header",
   "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
   "viewScript": "file:./view.js",
   "supports": {
     "layout": {

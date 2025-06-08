@@ -5,6 +5,7 @@ import { select, dispatch } from '@wordpress/data';
 
 import { Controls } from './components/controls.js';
 import './meros-nav.js';
+import './editor.scss';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 

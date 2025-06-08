@@ -22,11 +22,11 @@ add_action('init', function () {
 
 // Enqueue navigation-block stylesheet.
 add_action('wp_enqueue_scripts', function() {
-    $src = trailingslashit(get_meros_dyanamic_header_uri()) . 'build/style-index.css';
+    $src = trailingslashit(get_meros_dyanamic_header_uri()) . 'build/view.css';
     wp_enqueue_style(
         'meros-dynamic-header-styles',
         $src,
         [],
-        filemtime(wp_normalize_path(dirname(__DIR__) . '/build/style-index.css'))
+        filemtime(wp_normalize_path(dirname(__DIR__) . '/build/view.css'))
     );
 });
