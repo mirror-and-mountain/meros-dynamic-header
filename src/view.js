@@ -83,8 +83,6 @@ function setupMerosNav() {
         if (!merosNav) return;
         const merosNavContainer = merosNav.querySelector('.wp-block-navigation__responsive-container');
         if (!merosNavContainer) return;
-        // Needed globally
-        const merosNavHighlightColor = merosNav.dataset.merosNavHighlightColor || '#f0f0f0';
 
         const mobileBreakpoint = '(max-width: 599px)';
         const mql = window.matchMedia(mobileBreakpoint);
@@ -143,142 +141,47 @@ function setupMerosNav() {
         }
 
         function applyStyles(e) {
+            const merosNavHighlightColor = merosNav.dataset.merosNavHighlightColor || '#f0f0f0';
+            const merosNavDesktopHighlight = merosNav.dataset.merosNavDesktopHighlight || 'false';
             const merosNavBackgroundColor = merosNav.dataset.merosNavBackgroundColor || '#FFFFFF';
             const merosNavTextColor = merosNav.dataset.merosNavTextColor || '#000000';
-            const navContainers = merosNavContainer.querySelectorAll('.wp-block-navigation-item') || [];
+            const root = document.querySelector(':root');
+            
+            root.style.setProperty('--meros-nav-highlight-color', merosNavHighlightColor);
+
             const navItems = merosNavContainer.querySelectorAll('.wp-block-navigation-item__content') || [];
-            const highlightStyle = merosNav.dataset.merosNavHighlightStyle || 'solid';
-            const highlightColor = merosNavHighlightColor;
-            const highlightThickness = '2px';
 
-            // Set default transparent border to prevent shifting
-            const initBorder = el => el.style.setProperty('border-bottom', `${highlightThickness} ${highlightStyle} transparent`, 'important');
+            // Ensure the current page has the current-menu-item class
+            navItems.forEach(item => {
+                if (item.tagName !== 'A') return;
+                const normalisedUrl = url => url.replace(/\/+$/, '').replace(/#.*$/, '');
+                const itemHref      = normalisedUrl(item.href);
+                const currentHref   = normalisedUrl(window.location.href);
 
-            const setBorderColor = (el, color) => el.style.setProperty('border-bottom-color', color, 'important');
-            const removeBorderColor = el => el.style.setProperty('border-bottom-color', 'transparent', 'important');
+                const li = item.closest('li');
+                if (!li) return;
 
-            const setBackground = el => el.style.setProperty('background-color', highlightColor, 'important');
-            const removeBackground = el => el.style.removeProperty('background-color');
-
-            const widenBorderSpan = el => el.style.setProperty('padding-inline', '0.2rem', 'important');
-
-            const handleEnter = e => {
-                setBackground(e.currentTarget);
-                setBorderColor(e.currentTarget, highlightColor);
-            };
-            const handleLeave = e => {
-                removeBackground(e.currentTarget);
-                const isCurrent = e.currentTarget.classList.contains('current-menu-item');
-                if (!isCurrent) removeBorderColor(e.currentTarget);
-            };
-            const handleMouseDown = e => setBackground(e.currentTarget);
-            const handleMouseUp = e => setBackground(e.currentTarget);
-
-            const attachInteractiveListeners = el => {
-                el.removeEventListener('mouseenter', handleEnter);
-                el.removeEventListener('mouseleave', handleLeave);
-                el.removeEventListener('focus', handleEnter);
-                el.removeEventListener('blur', handleLeave);
-                el.removeEventListener('mousedown', handleMouseDown);
-                el.removeEventListener('mouseup', handleMouseUp);
-
-                el.addEventListener('mouseenter', handleEnter);
-                el.addEventListener('mouseleave', handleLeave);
-                el.addEventListener('focus', handleEnter);
-                el.addEventListener('blur', handleLeave);
-                el.addEventListener('mousedown', handleMouseDown);
-                el.addEventListener('mouseup', handleMouseUp);
-            };
+                const isCurrent = itemHref === currentHref;
+                li.classList.toggle('current-menu-item', isCurrent);
+            });
 
             if (e.matches || merosNav.classList.contains('has-meros-nav-always')) {
+                // Add mobile menu styles
                 merosNavContainer.style.setProperty('background-color', merosNavBackgroundColor, 'important');
                 merosNavContainer.style.setProperty('color', merosNavTextColor, 'important');
 
-                navItems.forEach(item => {
-                    if (item.tagName !== 'A') return;
-
-                    const normalizeUrl = url => url.replace(/\/+$/, '').replace(/#.*$/, '');
-                    const itemHref = normalizeUrl(item.href);
-                    const currentHref = normalizeUrl(window.location.href);
-                    const li = item.closest('li');
-                    if (!li) return;
-
-                    // Clean up styles from desktop mode
-                    removeBorderColor(li);
-                    li.style.removeProperty('padding-inline');
-
-                    // Remove desktop listeners
-                    if (li._applyBorder) {
-                        li.removeEventListener('mouseenter', li._applyBorder);
-                        li.removeEventListener('mouseleave', li._removeBorder);
-                        li.removeEventListener('focus', li._applyBorder);
-                        li.removeEventListener('blur', li._removeBorder);
-                        delete li._applyBorder;
-                        delete li._removeBorder;
-                    }
-
-                    const isCurrent = itemHref === currentHref;
-                    li.classList.toggle('current-menu-item', isCurrent);
-
-                    if (isCurrent) {
-                        setBackground(li);
-                    } else {
-                        removeBackground(li);
-                    }
-                });
-
-                navContainers.forEach(item => {
-                    if (item.tagName !== 'LI') return;
-
-                    // Clean up any styling from desktop mode
-                    removeBorderColor(item);
-                    item.style.removeProperty('padding-inline');
-
-                    const isCurrent = item.classList.contains('current-menu-item');
-                    if (isCurrent) {
-                        setBackground(item);
-                    } else {
-                        removeBackground(item);
-                        attachInteractiveListeners(item);
-                    }
-                });
+                // Remove desktop styling class
+                merosNavContainer.classList.remove('has-meros-nav-desktop-highlight');
             }
             else {
+                // Remove mobile menu styles
                 merosNavContainer.style.removeProperty('background-color');
                 merosNavContainer.style.removeProperty('color');
 
-                navItems.forEach(item => {
-                    if (item.tagName !== 'A') return;
-
-                    const normalizeUrl = url => url.replace(/\/+$/, '').replace(/#.*$/, '');
-                    const itemHref = normalizeUrl(item.href);
-                    const currentHref = normalizeUrl(window.location.href);
-                    const li = item.closest('li');
-                    if (!li) return;
-
-                    widenBorderSpan(li);
-                    initBorder(li);
-
-                    const isCurrent = itemHref === currentHref;
-                    li.classList.toggle('current-menu-item', isCurrent);
-
-                    if (!isCurrent) {
-                        removeBorderColor(li);
-                        li._applyBorder = () => setBorderColor(li, highlightColor);
-                        li._removeBorder = () => removeBorderColor(li);
-                        li.addEventListener('mouseenter', li._applyBorder);
-                        li.addEventListener('mouseleave', li._removeBorder);
-                        li.addEventListener('focus', li._applyBorder);
-                        li.addEventListener('blur', li._removeBorder);
-                    } else {
-                        setBorderColor(li, highlightColor);
-                    }
-                });
-
-                navContainers.forEach(item => {
-                    if (item.tagName !== 'LI') return;
-                    removeBackground(item);
-                });
+                // Add desktop styling class if provided
+                if (merosNavDesktopHighlight === 'true') {
+                    merosNavContainer.classList.add('has-meros-nav-desktop-highlight');
+                }
             }
         }
 

@@ -21,7 +21,7 @@ wp.domReady(() => {
                 merosNavBgColor: { type: 'string', default: '#FFFFFF' },
                 merosNavTextColor: { type: 'string', default: '#000000' },
                 merosNavHighlightColor: { type: 'string', default: '#f0f0f0' },
-                merosNavHighlightStyle: { type: 'string', default: 'none' },
+                merosNavDesktopHighlight: { type: 'boolean', default: false },
                 merosNavShowLogo: { type: 'boolean', default: true }
             }
         };
@@ -101,17 +101,10 @@ wp.domReady(() => {
                                         setAttributes={setAttributes}
                                     />
                                     <div style={{ height: '16px' }} />
-                                    <SelectControl
-                                        label={__('Highlight Style', 'meros-dynamic-header')}
-                                        help={__('This setting only applies on navigation items in a desktop view.', 'meros-dynamic-header')}
-                                        value={attributes.merosNavHighlightStyle}
-                                        options={[
-                                            { label: __('None', 'meros-dynamic-header'), value: 'none' },
-                                            { label: __('Solid', 'meros-dynamic-header'), value: 'solid' },
-                                            { label: __('Dotted', 'meros-dynamic-header'), value: 'dotted' },
-                                            { label: __('Dashed', 'meros-dynamic-header'), value: 'dashed' }
-                                        ]}
-                                        onChange={(value) => setAttributes({ merosNavHighlightStyle: value })}
+                                    <ToggleControl
+                                        label={__('Enable Navigation Highlights on Desktop', 'meros-dynamic-header')}
+                                        checked={attributes.merosNavDesktopHighlight}
+                                        onChange={(value) => setAttributes({ merosNavDesktopHighlight: value })}
                                     />
                                 </>
                             )}

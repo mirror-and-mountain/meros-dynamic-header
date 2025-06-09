@@ -118,6 +118,16 @@
             width: 100%;
             padding: 15px 10px 15px 20px;
             border-bottom: 1px solid #e5e5e5;
+
+            &:hover {
+                background-color: var(--meros-nav-highlight-color, #f0f0f0) !important;
+            }
+            &:focus {
+                background-color: var(--meros-nav-highlight-color, #f0f0f0) !important;
+            }
+            &.current-menu-item {
+                background-color: var(--meros-nav-highlight-color, #f0f0f0) !important;
+            }
         }
     }
 

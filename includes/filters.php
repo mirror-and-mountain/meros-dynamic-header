@@ -47,7 +47,11 @@ add_filter('render_block_core/navigation', function ($block_content, $block) {
         $processor->set_attribute('data-meros-nav-direction', $attrs['merosNavDirection'] ?? 'left');
         $processor->set_attribute('data-meros-nav-background-color', $attrs['merosNavBgColor'] ?? '#FFFFFF');
         $processor->set_attribute('data-meros-nav-highlight-color', $attrs['merosNavHighlightColor'] ?? '#F0F0F0');
-        $processor->set_attribute('data-meros-nav-highlight-style', $attrs['merosNavHighlightStyle'] ?? 'none');
+        if (isset($attrs['merosNavDesktopHighlight']) && $attrs['merosNavDesktopHighlight'] === true) {
+            $processor->set_attribute('data-meros-nav-desktop-highlight', 'true');
+        } else {
+            $processor->set_attribute('data-meros-nav-desktop-highlight', 'false');
+        }
         $processor->set_attribute('data-meros-nav-text-color', $attrs['merosNavTextColor'] ?? '#000000');
 
         if ($attrs['merosNavShowLogo'] ?? true) {
