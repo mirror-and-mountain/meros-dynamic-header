@@ -91,6 +91,7 @@ function setupMerosNav() {
             const existing = merosNavContainer.querySelector('.meros-nav-top-section');
             const container = merosNavContainer.querySelector('.wp-block-navigation__responsive-dialog');
             const closeButton = container.querySelector('.wp-block-navigation__responsive-container-close');
+            const subMenuIcons = container.querySelectorAll('.wp-block-navigation__submenu-icon') || [];
             const logoSrc = merosNav.dataset.merosNavLogo || null;
 
             if (e.matches || merosNav.classList.contains('has-meros-nav-always')) {
@@ -127,6 +128,15 @@ function setupMerosNav() {
                 } else if (closeButton && !logoContainer) {
                     topSection.appendChild(closeButton);
                 }
+
+                subMenuIcons.forEach((icon) => {
+                    const button = icon.previousElementSibling;
+
+                    if (button && button.tagName === 'BUTTON') {
+                        button.appendChild(icon);
+                    }
+                });
+
             } else {
                 // Put the close button back to the top of the container
                 if (closeButton && container) {
@@ -137,6 +147,15 @@ function setupMerosNav() {
                 if (topSection) {
                     topSection.remove();
                 }
+
+                subMenuIcons.forEach((icon) => {
+                    const button = icon.parentElement;
+                    const parentOfButton = button.parentElement;
+
+                    if (button && button.tagName === 'BUTTON' && parentOfButton && parentOfButton.tagName === 'LI') {
+                        button.after(icon);
+                    }
+                });
             }
         }
 
